@@ -1,46 +1,53 @@
-LiniusNv
 
-<div align="center"><img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>Advanced WhatsApp WebSocket Library for Node.js
 
-""License" (https://img.shields.io/badge/license-MIT-blue.svg)" (LICENSE)
-""GitHub" (https://img.shields.io/badge/source-GitHub-black.svg)" (https://github.com/pou-code/Baileys)
-""Node" (https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)" (package.json)
+```markdown
+<div align="center">
+  <img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>
 
-A powerful WebSocket-based library for interacting with WhatsApp Web through Node.js.
+  # LiniusNv
 
-LiniusNv is an enhanced fork of "Baileys" (https://github.com/WhiskeySockets/Baileys), originally developed by WhiskeySockets, with additional features and custom implementations.
+  **Advanced WhatsApp WebSocket Library for Node.js**
 
-</div>---
+  [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![GitHub](https://img.shields.io/badge/source-GitHub-black.svg)](https://github.com/pou-code/Baileys)
+  [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
 
-Table of Contents
+  A powerful WebSocket-based library for interacting with WhatsApp Web through Node.js.
 
-- "Overview" (#overview)
-- "Installation" (#installation)
-- "Import" (#import)
-- "Getting Started" (#getting-started)
-  - "QR Code Authentication" (#1-qr-code-authentication)
-  - "Pairing Code Authentication" (#2-pairing-code-authentication)
-- "Data Storage" (#data-storage)
-- "Messaging" (#messaging)
-  - "Message Synchronization" (#message-synchronization)
-  - "Order Message" (#order-message)
-  - "Poll Result Snapshot" (#poll-result-snapshot)
-  - "Product Message" (#product-message)
-  - "Interactive Message" (#interactive-message)
-  - "Group Label" (#group-label)
-  - "Send to Group Members" (#send-to-group-members)
-- "Message Helpers" (#message-helpers)
-- "Credits" (#credits)
-- "Contributing" (#contributing)
-- "Disclaimer" (#disclaimer)
+  LiniusNv is an enhanced fork of [Baileys](https://github.com/WhiskeySockets/Baileys), originally developed by WhiskeySockets, with additional features and custom implementations.
+</div>
 
 ---
 
-Overview
+## Table of Contents
+
+- [Overview](#overview)
+- [Installation](#installation)
+- [Import](#import)
+- [Getting Started](#getting-started)
+  - [QR Code Authentication](#1-qr-code-authentication)
+  - [Pairing Code Authentication](#2-pairing-code-authentication)
+- [Data Storage](#data-storage)
+- [Messaging](#messaging)
+  - [Message Synchronization](#message-synchronization)
+  - [Order Message](#order-message)
+  - [Poll Result Snapshot](#poll-result-snapshot)
+  - [Product Message](#product-message)
+  - [Interactive Message](#interactive-message)
+  - [Group Label](#group-label)
+  - [Send to Group Members](#send-to-group-members)
+- [Message Helpers](#message-helpers)
+- [Credits](#credits)
+- [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
+
+---
+
+## Overview
 
 LiniusNv provides a convenient interface for connecting applications and automation systems to WhatsApp Web.
 
-Key Features
+### Key Features
 
 - QR Code authentication.
 - Pairing Code authentication.
@@ -55,43 +62,53 @@ Key Features
 
 ---
 
-Installation
+## Installation
 
 LiniusNv is distributed directly through GitHub and is not currently published on the npm registry.
 
-Install directly
+### Install directly
 
+```bash
 npm install github:pou-code/Baileys
+```
 
 Manual package configuration
 
-Add the following dependency to your "package.json":
+Add the following dependency to your package.json:
 
+```json
 {
   "dependencies": {
     "@liniusnv/baileys": "github:LiniusNv-Bail/Bails"
   }
 }
+```
 
 Migration from original Baileys
 
-Already using "@whiskeysockets/baileys"?
+Already using @whiskeysockets/baileys?
 
-You can replace the original package with LiniusNv without changing your existing "require()" or "import" statements.
+You can replace the original package with LiniusNv without changing your existing require() or import statements.
 
+```json
 {
   "dependencies": {
     "@whiskeysockets/baileys": "github:LiniusNv-Bail/Bails"
   }
 }
+```
 
 Your existing code can continue using:
 
+```javascript
 const baileys = require('@whiskeysockets/baileys');
+```
 
 Install a specific branch or commit
 
+```bash
 npm install github:LiniusNv-Bail/Bails#main
+```
 
 ---
 
@@ -99,10 +116,12 @@ Import
 
 Import the required functions from the package:
 
+```javascript
 const {
   default: makeWASocket,
   Browsers
 } = require('@LiniusNv-Bail/Bails');
+```
 
 ---
 
@@ -112,6 +131,7 @@ Getting Started
 
 The simplest way to connect your WhatsApp account is through a QR Code.
 
+```javascript
 const {
   default: makeWASocket,
   Browsers
@@ -121,6 +141,7 @@ const client = makeWASocket({
   browser: Browsers.LiniusNv('Chrome'),
   printQRInTerminal: true
 });
+```
 
 Scan the generated QR Code using the Linked Devices feature in WhatsApp.
 
@@ -128,6 +149,7 @@ Scan the generated QR Code using the Linked Devices feature in WhatsApp.
 
 You can also authenticate using a phone number and a pairing code.
 
+```javascript
 const {
   default: makeWASocket,
   fetchLatestWAWebVersion,
@@ -148,15 +170,18 @@ const code = await client.requestPairingCode(
 );
 
 console.log('Your pairing code: ' + code);
+```
 
 Custom Pairing Code
 
 You can optionally provide a custom pairing code:
 
+```javascript
 const code = await client.requestPairingCode(
   number,
   'YYYYYYYY'
 );
+```
 
 ---
 
@@ -164,6 +189,7 @@ Data Storage
 
 LiniusNv supports in-memory storage for maintaining contact and event information during runtime.
 
+```javascript
 const {
   default: makeWASocket,
   makeInMemoryStore
@@ -190,6 +216,7 @@ client.ev.on('contacts.upsert', () => {
     Object.values(store.contacts)
   );
 });
+```
 
 ---
 
@@ -199,18 +226,19 @@ LiniusNv provides several methods for sending and relaying different WhatsApp me
 
 Message Synchronization
 
-"noSelfSync"
+noSelfSync
 
-The "noSelfSync" option controls whether a relayed message is synchronized with your other linked devices.
+The noSelfSync option controls whether a relayed message is synchronized with your other linked devices.
 
 This option applies to private one-to-one chats and does not prevent delivery to the recipient.
 
-Configuration| Behavior
-"true"| Sends the message without syncing it to your other linked devices.
-"false"| Sends the message and allows normal synchronization.
+Configuration Behavior
+true Sends the message without syncing it to your other linked devices.
+false Sends the message and allows normal synchronization.
 
 Disable synchronization
 
+```javascript
 await client.relayMessage(
   m.chat,
   {
@@ -220,9 +248,11 @@ await client.relayMessage(
     noSelfSync: true
   }
 );
+```
 
 Enable synchronization (default)
 
+```javascript
 await client.relayMessage(
   m.chat,
   {
@@ -232,9 +262,11 @@ await client.relayMessage(
     noSelfSync: false
   }
 );
+```
 
 Using sendMessage
 
+```javascript
 await client.sendMessage(
   m.chat,
   {
@@ -244,6 +276,7 @@ await client.sendMessage(
     noSelfSync: true
   }
 );
+```
 
 ---
 
@@ -251,9 +284,10 @@ Order Message
 
 Send an order-style message containing a product thumbnail, store name, and payment information.
 
+```javascript
 const fs = require('fs');
 
-const thumbnail = fs.readFileSync('./pouthumb.jpg');
+const thumbnail = fs.readFileSync('./liniusnvthumb.jpg');
 
 await client.sendMessage(m.chat, {
   thumbnail,
@@ -264,6 +298,7 @@ await client.sendMessage(m.chat, {
 }, {
   quoted: m
 });
+```
 
 ---
 
@@ -271,6 +306,7 @@ Poll Result Snapshot
 
 Send a poll result snapshot with newsletter information.
 
+```javascript
 await client.sendMessage(m.chat, {
   pollResultMessage: {
     name: 'My Poll',
@@ -284,6 +320,7 @@ await client.sendMessage(m.chat, {
     }
   }
 });
+```
 
 ---
 
@@ -291,12 +328,13 @@ Product Message
 
 Send a product-style message containing product information, pricing, and an external URL button.
 
+```javascript
 await client.relayMessage(m.chat, {
   productMessage: {
     title: 'Product.pdf',
     description: 'Product description',
     thumbnail: {
-      url: './pouthumb.jpg'
+      url: './liniusnvthumb.jpg'
     },
     productId: 'EXAMPLE_TOKEN',
     retailerId: 'EXAMPLE_RETAILER_ID',
@@ -316,6 +354,7 @@ await client.relayMessage(m.chat, {
     currencyCode: 'IDR'
   }
 });
+```
 
 ---
 
@@ -323,9 +362,10 @@ Interactive Message
 
 Create interactive messages with media, titles, descriptions, footers, and configurable buttons.
 
+```javascript
 await client.sendMessage(m.chat, {
   image: {
-    url: './pouimg.jpg'
+    url: './liniusnvimg.jpg'
   },
   text: 'body',
   title: 'title',
@@ -344,6 +384,7 @@ await client.sendMessage(m.chat, {
     }
   })
 });
+```
 
 ---
 
@@ -351,23 +392,27 @@ Group Label
 
 Send a message containing a custom group member label.
 
+```javascript
 await client.sendMessage(m.chat, {
   groupLabel: {
     labelText: 'Tagged members appear here'
   }
 });
+```
 
 ---
 
 Send to Group Members
 
-Use "sendMessageMembers()" to send a message through the group members messaging helper.
+Use sendMessageMembers() to send a message through the group members messaging helper.
 
+```javascript
 await client.sendMessageMembers(m.chat, {
   extendedTextMessage: {
     text: 'Hello members'
   }
 }, {});
+```
 
 ---
 
@@ -379,6 +424,7 @@ These methods simplify sending text, images, videos, audio, locations, polls, qu
 
 Send Text
 
+```javascript
 await client.sendText(
   m.chat,
   'Hello!',
@@ -398,12 +444,14 @@ await client.sendText(
     }
   }
 );
+```
 
 Send Image
 
+```javascript
 await client.sendImage(
   m.chat,
-  { url: './pouimg.jpg' },
+  { url: './liniusnvimg.jpg' },
   'Caption',
   {
     contextInfo: {
@@ -421,12 +469,14 @@ await client.sendImage(
     }
   }
 );
+```
 
 Send Video
 
+```javascript
 await client.sendVideo(
   m.chat,
-  { url: './video.mp4' },
+  { url: './liniusnvvideo.mp4' },
   'Caption',
   {
     contextInfo: {
@@ -444,12 +494,14 @@ await client.sendVideo(
     }
   }
 );
+```
 
 Send Audio
 
+```javascript
 await client.sendAudio(
   m.chat,
-  { url: './pouaudio.mp3' },
+  { url: './liniusnvaudio.mp3' },
   {
     contextInfo: {
       mentionedJid: [m.chat]
@@ -466,9 +518,11 @@ await client.sendAudio(
     }
   }
 );
+```
 
 Send Location
 
+```javascript
 await client.sendLocation(
   m.chat,
   'Caption',
@@ -492,9 +546,11 @@ await client.sendLocation(
     }
   }
 );
+```
 
 Send Poll
 
+```javascript
 await client.sendPoll(
   m.chat,
   'Pick one',
@@ -516,9 +572,11 @@ await client.sendPoll(
     }
   }
 );
+```
 
 Send Quiz
 
+```javascript
 await client.sendQuiz(
   m.chat,
   'Quiz question',
@@ -540,32 +598,35 @@ await client.sendQuiz(
     }
   }
 );
+```
 
 Send Status Mention
 
 Send a message through the status mention helper.
 
+```javascript
 await client.statusMention(m.chat, {
   extendedTextMessage: {
     text: 'Mentioned in status'
   }
 });
+```
 
 ---
 
 Credits
 
-LiniusNv is built upon the foundation of "Baileys" (https://github.com/WhiskeySockets/Baileys).
+LiniusNv is built upon the foundation of Baileys.
 
 Special thanks to:
 
-- Adhiraj Singh — Original creator of Baileys.
-- WhiskeySockets — Maintainers of the Baileys project.
-- Open-source contributors — Developers who help maintain and improve the underlying ecosystem.
+· Adhiraj Singh — Original creator of Baileys.
+· WhiskeySockets — Maintainers of the Baileys project.
+· Open-source contributors — Developers who help maintain and improve the underlying ecosystem.
 
 All credits for the original protocol implementation belong to their respective authors and contributors.
 
-For licensing information, see "LICENSE" (LICENSE).
+For licensing information, see LICENSE.
 
 ---
 
@@ -575,8 +636,8 @@ Contributions are welcome.
 
 If you encounter bugs, have feature requests, or want to improve the project, please refer to:
 
-- "CONTRIBUTING.md" (CONTRIBUTING.md)
-- "GitHub Repository" (https://github.com/LiniusNv-Bail/Bails)
+· CONTRIBUTING.md
+· GitHub Repository
 
 Before submitting a contribution, make sure your changes are properly tested and documented.
 
@@ -593,3 +654,5 @@ Users are responsible for ensuring that their usage complies with applicable law
 Sending bulk, unsolicited, or abusive messages may result in account restrictions or permanent bans.
 
 Use LiniusNv responsibly.
+
+```
