@@ -796,6 +796,6 @@ Users are responsible for ensuring that their usage complies with applicable law
 Sending bulk, unsolicited, or abusive messages may result in account restrictions or permanent bans.
 
 Use LiniusNv responsibly.
-Developer: https://t.me/nvlinius
+developer: https://t.me/nvlinius
 
 ---

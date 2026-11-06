@@ -1,8 +1,8 @@
 {
-  "name": "@LiniusNv-Bail/Bails",
+  "name": "@liniusnv/baileys",
   "type": "module",
   "version": "1.0.0",
-  "description": "A WebSockets library for interacting with WhatsApp Web \u2014 liniusnv fork of Baileys",
+  "description": "A WebSockets library for interacting with WhatsApp Web — liniusnv fork of Baileys",
   "keywords": [
     "linius",
     "baileys",
@@ -140,7 +140,7 @@
     "node": ">=20.0.0"
   },
   "bugs": {
-    "url": "https://github.com/pou-code/Baileys/issues"
+    "url": "https://github.com/LiniusNv-Bail/Bails/issues"
   },
   "contributors": [
     "WhiskeySockets (original Baileys authors)"
