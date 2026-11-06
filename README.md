@@ -1,6 +1,4 @@
 
-
-```markdown
 <div align="center">
   <img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>
 
@@ -654,5 +652,3 @@ Users are responsible for ensuring that their usage complies with applicable law
 Sending bulk, unsolicited, or abusive messages may result in account restrictions or permanent bans.
 
 Use LiniusNv responsibly.
-
-```
