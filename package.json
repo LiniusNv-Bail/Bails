@@ -1,5 +1,5 @@
 {
-  "name": "@liniusnv/baileys",
+  "name": "@LiniusNv-Bail/Bails",
   "type": "module",
   "version": "1.0.0",
   "description": "A WebSockets library for interacting with WhatsApp Web \u2014 liniusnv fork of Baileys",
