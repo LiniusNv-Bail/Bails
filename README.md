@@ -79,7 +79,8 @@ Add the following dependency to your package.json:
 ```json
 {
   "dependencies": {
-    "@LiniusNv-Bail/Bails": "github:LiniusNv-Bail/Bails"
+    "@LiniusNv-Bail/Bails": "github:LiniusNv-Bail/Bails",
+    "jimp": "^1.6.1"
   }
 }
 ```
@@ -93,7 +94,8 @@ You can replace the original package with LiniusNv without changing your existin
 ```json
 {
   "dependencies": {
-    "@whiskeysockets/baileys": "github:LiniusNv-Bail/Bails"
+    "@whiskeysockets/baileys": "github:LiniusNv-Bail/Bails",
+    "jimp": "^1.6.1"
   }
 }
 ```
