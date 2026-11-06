@@ -7,7 +7,7 @@ l
   **Advanced WhatsApp WebSocket Library for Node.js**
 
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-  [![GitHub](https://img.shields.io/badge/source-GitHub-black.svg)](https://github.com/pou-code/Baileys)
+  [![GitHub](https://img.shields.io/badge/source-GitHub-black.svg)](https://github.com/LiniusNv-Bail/Bails)
   [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
 
   A powerful WebSocket-based library for interacting with WhatsApp Web through Node.js.
@@ -69,7 +69,7 @@ LiniusNv is distributed directly through GitHub and is not currently published o
 ### Install directly
 
 ```bash
-npm install github:pou-code/Baileys
+npm install github:LiniusNv-Bail/Bails
 ```
 
 Manual package configuration
