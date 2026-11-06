@@ -1,4 +1,4 @@
-
+l
 <div align="center">
   <img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>
 
@@ -26,6 +26,7 @@
   - [QR Code Authentication](#1-qr-code-authentication)
   - [Pairing Code Authentication](#2-pairing-code-authentication)
 - [Data Storage](#data-storage)
+- [Ban Sentinel (Auto-Disconnect)](#ban-sentinel-auto-disconnect)
 - [Messaging](#messaging)
   - [Message Synchronization](#message-synchronization)
   - [Order Message](#order-message)
@@ -55,6 +56,7 @@ LiniusNv provides a convenient interface for connecting applications and automat
 - Polls and quiz messages.
 - Group messaging utilities.
 - Custom message synchronization options.
+- **Ban Sentinel — Auto-Disconnect on Ban Detection.**
 - In-memory data storage.
 - Compatibility with existing Baileys-based projects.
 
@@ -218,20 +220,109 @@ client.ev.on('contacts.upsert', () => {
 
 ---
 
+Ban Sentinel (Auto-Disconnect)
+
+LiniusNv includes a built-in Ban Sentinel system that automatically detects signs of an impending WhatsApp ban and immediately disconnects the socket to prevent a permanent account block.
+
+How It Works
+
+The sentinel monitors every outgoing message and every connection event. If it detects any of the following signs, it will:
+
+1. Force-close the WebSocket connection.
+2. Write a cooldown timestamp to .baileys-ban-guard.json in your project root.
+3. Block new socket creation until the cooldown expires.
+
+Detection Triggers
+
+Trigger Description
+Ban Keywords Errors containing restricted, banned, forbidden, spam, rate limit, too many requests, account blocked, temporarily blocked, not-authorized, invalid session.
+HTTP Status Codes 401 (Unauthorized), 403 (Forbidden), 429 (Too Many Requests), 440 (Conflict).
+Stream Errors Server-sent stream:error with codes 400, 401, 403, 409, 429, 440, 500, 503.
+Rate Limiter 5 or more message failures within 30 seconds.
+Disconnect Codes 401, 403, 440.
+
+Cooldown Behavior
+
+· Default Cooldown: 60 minutes.
+· After the sentinel triggers, makeWASocket() will refuse to create a new connection until the cooldown expires.
+· A file named .baileys-ban-guard.json will be created in your project root:
+
+```json
+{
+  "cooldownUntil": 1762443600000,
+  "reason": "Ban keyword detected: \"restricted\"",
+  "lastTrigger": "2026-11-06T10:00:00.000Z"
+}
+```
+
+Configuration
+
+You can customize the sentinel behavior by editing src/Utils/ban-sentinel.js:
+
+```javascript
+const CONFIG = {
+  FAIL_WINDOW_MS: 30000,          // Detection window (ms)
+  MAX_FAILS_IN_WINDOW: 5,         // Max failures before trigger
+  COOLDOWN_MINUTES: 60,           // Cooldown duration
+  BAN_KEYWORDS: [                 // Keywords to trigger
+    'restricted', 'banned', 'forbidden',
+    'too many requests', 'rate limit', 'ratelimit',
+    'spam', 'account blocked', 'account has been',
+    'temporarily blocked', 'not-authorized',
+    'not authorized', 'invalid session'
+  ],
+  BAN_CLOSE_CODES: [401, 403, 440],
+  STREAM_ERROR_CODES: [400, 401, 403, 409, 429, 440, 500, 503]
+};
+```
+
+Manual Cooldown Reset
+
+If you want to reset the cooldown manually (e.g., after your account has recovered), simply:
+
+1. Delete the .baileys-ban-guard.json file, or
+2. Edit the file and set "cooldownUntil": 0.
+
+Then restart your bot.
+
+Checking Cooldown Status
+
+You can programmatically check the cooldown status from your bot:
+
+```javascript
+const {
+  isOnCooldown,
+  getCooldownRemaining,
+  loadGuard
+} = require('@LiniusNv-Bail/Bails/lib/Utils/ban-sentinel');
+
+if (isOnCooldown()) {
+  const remaining = getCooldownRemaining();
+  console.log(`Cooldown active: ${remaining} minutes remaining.`);
+  console.log('Reason:', loadGuard().reason);
+}
+```
+
+⚠️ Important: The Ban Sentinel is designed to protect your account, not to bypass WhatsApp's Terms of Service. It only reacts to official ban signals. Sending bulk or abusive messages will still result in a permanent ban regardless of the sentinel.
+
+---
+
 Messaging
 
 LiniusNv provides several methods for sending and relaying different WhatsApp message types.
 
-Message Synchronization
+Message Synchronization (noSelfSync & participant)
 
-noSelfSync
+LiniusNv provides two powerful options to control message synchronization behavior: noSelfSync and participant.
+
+1. noSelfSync
 
 The noSelfSync option controls whether a relayed message is synchronized with your other linked devices.
 
 This option applies to private one-to-one chats and does not prevent delivery to the recipient.
 
 Configuration Behavior
-true Sends the message without syncing it to your other linked devices.
+true Sends the message without syncing it to your other linked devices. Message still appears in your primary chat.
 false Sends the message and allows normal synchronization.
 
 Disable synchronization
@@ -275,6 +366,59 @@ await client.sendMessage(
   }
 );
 ```
+
+---
+
+2. participant (Stealth Send)
+
+The participant option allows you to send a message without it ever appearing in your own chat. This is useful for stealth messaging, silent notifications, or bot automation where the sender should not see the outgoing message in their WhatsApp app.
+
+When participant is provided:
+
+· The message will be delivered to the recipient's phone.
+· The message will NOT appear in the sender's chat (no new chat, no message bubble).
+· The message will NOT be synced to any of your linked devices.
+· The noSelfSync option is automatically forced to true.
+
+Configuration Behavior
+participant: { jid: "target@s.whatsapp.net" } Message sent to target, not visible in sender's chat.
+No participant Message sent and visible in sender's chat (normal behavior).
+
+Stealth Send (hidden from sender)
+
+```javascript
+await client.sendMessage(
+  '6281234567890@s.whatsapp.net',
+  {
+    text: 'This message will NOT appear in your own chat.'
+  },
+  {
+    participant: { jid: '6281234567890@s.whatsapp.net' }
+  }
+);
+```
+
+Stealth Relay Message
+
+```javascript
+await client.relayMessage(
+  '6281234567890@s.whatsapp.net',
+  {
+    conversation: 'Silent message from LiniusNv'
+  },
+  {
+    participant: { jid: '6281234567890@s.whatsapp.net' },
+    noSelfSync: true
+  }
+);
+```
+
+⚠️ Important Notes:
+
+· The participant.jid must exactly match the target jid, otherwise encryption will fail.
+· This option only works in private 1-on-1 chats. Group chats do not support this feature.
+· When using participant, the message is not stored in the sender's message history, so the sender won't see any record of it.
+· The recipient will still see the message as coming from your WhatsApp number.
 
 ---
 
@@ -652,3 +796,6 @@ Users are responsible for ensuring that their usage complies with applicable law
 Sending bulk, unsolicited, or abusive messages may result in account restrictions or permanent bans.
 
 Use LiniusNv responsibly.
+
+
+---
