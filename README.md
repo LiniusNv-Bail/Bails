@@ -79,7 +79,7 @@ Add the following dependency to your package.json:
 ```json
 {
   "dependencies": {
-    "@liniusnv/baileys": "github:LiniusNv-Bail/Bails"
+    "@LiniusNv-Bail/Bails": "github:LiniusNv-Bail/Bails"
   }
 }
 ```
