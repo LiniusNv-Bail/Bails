@@ -1,4 +1,4 @@
-# <div align='center'>PouCode</div>
+# <div align='center'>LiniusNv</div>
 
 <p align="center">
 
@@ -12,7 +12,7 @@
 [![GitHub](https://img.shields.io/badge/source-GitHub-black.svg)](https://github.com/pou-code/Baileys)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
 
-A WebSockets library for interacting with WhatsApp Web, maintained under the **PouCode** brand.
+A WebSockets library for interacting with WhatsApp Web, maintained under the **LiniusNv** brand.
 This project is a fork built on top of [Baileys](https://github.com/WhiskeySockets/Baileys) by WhiskeySockets.
 
 </div>
@@ -68,7 +68,7 @@ const {
 } = require('@LiniusNv-Bail/Bails');
 
 const client = makeWASocket({
-  browser: Browsers.poucode('Chrome'),
+  browser: Browsers.LiniusNv('Chrome'),
   printQRInTerminal: true
 });
 ```
@@ -82,7 +82,7 @@ const {
 } = require('@LiniusNv-Bail/Bails');
 
 const client = makeWASocket({
-  browser: Browsers.poucode('Chrome'),
+  browser: Browsers.LiniusNv('Chrome'),
   printQRInTerminal: false,
   version: await fetchLatestWAWebVersion(),
   aiLabel: false // set true to show an AI label on messages sent by the bot
@@ -134,21 +134,21 @@ logged into the same account). It does not affect delivery to the recipient.
 ```javascript
 // Sent to the recipient, but NOT synced to your other devices
 await client.relayMessage(m.chat, {
-  conversation: "Hello from PouCode"
+  conversation: "Hello from LiniusNv"
 }, {
   noSelfSync: true
 });
 
 // Sent to the recipient AND synced to your other devices (default behavior)
 await client.relayMessage(m.chat, {
-  conversation: "Hello from PouCode"
+  conversation: "Hello from LiniusNv"
 }, {
   noSelfSync: false
 });
 
 // Also works through sendMessage
 await client.sendMessage(m.chat, {
-  text: "Hello from PouCode"
+  text: "Hello from LiniusNv"
 }, {
   noSelfSync: true
 });
@@ -391,7 +391,7 @@ await client.statusMention(m.chat, {
 
 # Credits
 
-PouCode is a fork of [Baileys](https://github.com/WhiskeySockets/Baileys), originally created by
+LiniusNv is a fork of [Baileys](https://github.com/WhiskeySockets/Baileys), originally created by
 [Adhiraj Singh](https://github.com/adiwajshing) and maintained by the WhiskeySockets community.
 All credit for the underlying protocol implementation goes to the original authors and contributors.
 See [LICENSE](LICENSE) for the full license text and copyright notices.
