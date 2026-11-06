@@ -1,67 +1,117 @@
-# <div align='center'>LiniusNv</div>
+LiniusNv
 
-<p align="center">
+<div align="center"><img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>Advanced WhatsApp WebSocket Library for Node.js
 
-  <img src="https://cdn.imagetourls.com/uploads/tyImg/bu4HRyoM.png" width="180" alt="LiniusNv"/>
+""License" (https://img.shields.io/badge/license-MIT-blue.svg)" (LICENSE)
+""GitHub" (https://img.shields.io/badge/source-GitHub-black.svg)" (https://github.com/pou-code/Baileys)
+""Node" (https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)" (package.json)
 
-</p>
+A powerful WebSocket-based library for interacting with WhatsApp Web through Node.js.
 
-<div align='center'>
+LiniusNv is an enhanced fork of "Baileys" (https://github.com/WhiskeySockets/Baileys), originally developed by WhiskeySockets, with additional features and custom implementations.
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![GitHub](https://img.shields.io/badge/source-GitHub-black.svg)](https://github.com/pou-code/Baileys)
-[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen.svg)](package.json)
+</div>---
 
-A WebSockets library for interacting with WhatsApp Web, maintained under the **LiniusNv** brand.
-This project is a fork built on top of [Baileys](https://github.com/WhiskeySockets/Baileys) by WhiskeySockets.
+Table of Contents
 
-</div>
+- "Overview" (#overview)
+- "Installation" (#installation)
+- "Import" (#import)
+- "Getting Started" (#getting-started)
+  - "QR Code Authentication" (#1-qr-code-authentication)
+  - "Pairing Code Authentication" (#2-pairing-code-authentication)
+- "Data Storage" (#data-storage)
+- "Messaging" (#messaging)
+  - "Message Synchronization" (#message-synchronization)
+  - "Order Message" (#order-message)
+  - "Poll Result Snapshot" (#poll-result-snapshot)
+  - "Product Message" (#product-message)
+  - "Interactive Message" (#interactive-message)
+  - "Group Label" (#group-label)
+  - "Send to Group Members" (#send-to-group-members)
+- "Message Helpers" (#message-helpers)
+- "Credits" (#credits)
+- "Contributing" (#contributing)
+- "Disclaimer" (#disclaimer)
 
 ---
 
-## Installation
-Install directly from GitHub (not published on npm registry):
-```bash
+Overview
+
+LiniusNv provides a convenient interface for connecting applications and automation systems to WhatsApp Web.
+
+Key Features
+
+- QR Code authentication.
+- Pairing Code authentication.
+- WebSocket-based communication.
+- Message sending and relaying.
+- Interactive messages and media support.
+- Polls and quiz messages.
+- Group messaging utilities.
+- Custom message synchronization options.
+- In-memory data storage.
+- Compatibility with existing Baileys-based projects.
+
+---
+
+Installation
+
+LiniusNv is distributed directly through GitHub and is not currently published on the npm registry.
+
+Install directly
+
 npm install github:pou-code/Baileys
-```
 
-Or add it to your `package.json` manually:
-```json
-"dependencies": {
-  "@liniusnv/baileys": "github:LiniusNv-Bail/Bails"
+Manual package configuration
+
+Add the following dependency to your "package.json":
+
+{
+  "dependencies": {
+    "@liniusnv/baileys": "github:LiniusNv-Bail/Bails"
+  }
 }
-```
 
-Already have a bot built on the original `@whiskeysockets/baileys` and don't want to change every
-`require`/`import` in your codebase? Alias the dependency name instead, so the original package
-name points to this fork:
-```json
-"dependencies": {
-  "@whiskeysockets/baileys": "github:LiniusNv-Bail/Bails"
+Migration from original Baileys
+
+Already using "@whiskeysockets/baileys"?
+
+You can replace the original package with LiniusNv without changing your existing "require()" or "import" statements.
+
+{
+  "dependencies": {
+    "@whiskeysockets/baileys": "github:LiniusNv-Bail/Bails"
+  }
 }
-```
-With this alias, keep using `require('@whiskeysockets/baileys')` in your code as-is — npm will
-resolve it to this fork under the hood.
 
-You can also pin to a specific branch or commit:
-```bash
+Your existing code can continue using:
+
+const baileys = require('@whiskeysockets/baileys');
+
+Install a specific branch or commit
+
 npm install github:LiniusNv-Bail/Bails#main
-```
 
-## Import
-```javascript
+---
+
+Import
+
+Import the required functions from the package:
+
 const {
   default: makeWASocket,
-  // other exports
+  Browsers
 } = require('@LiniusNv-Bail/Bails');
-```
 
 ---
 
-# Connecting To WhatsApp
+Getting Started
 
-## With QR Code
-```javascript
+1. QR Code Authentication
+
+The simplest way to connect your WhatsApp account is through a QR Code.
+
 const {
   default: makeWASocket,
   Browsers
@@ -71,10 +121,13 @@ const client = makeWASocket({
   browser: Browsers.LiniusNv('Chrome'),
   printQRInTerminal: true
 });
-```
 
-## Connect With Pairing Code
-```javascript
+Scan the generated QR Code using the Linked Devices feature in WhatsApp.
+
+2. Pairing Code Authentication
+
+You can also authenticate using a phone number and a pairing code.
+
 const {
   default: makeWASocket,
   fetchLatestWAWebVersion,
@@ -85,322 +138,458 @@ const client = makeWASocket({
   browser: Browsers.LiniusNv('Chrome'),
   printQRInTerminal: false,
   version: await fetchLatestWAWebVersion(),
-  aiLabel: false // set true to show an AI label on messages sent by the bot
-  // other options
+  aiLabel: false
 });
 
-const number = "628XXXXXXXXXX";
-const code = await client.requestPairingCode(number.trim()); // or (number, "YYYYYYYY") for a custom pairing code
+const number = '628XXXXXXXXXX';
 
-console.log("Your pairing code: " + code);
-```
+const code = await client.requestPairingCode(
+  number.trim()
+);
 
-# Storing Data
-```javascript
+console.log('Your pairing code: ' + code);
+
+Custom Pairing Code
+
+You can optionally provide a custom pairing code:
+
+const code = await client.requestPairingCode(
+  number,
+  'YYYYYYYY'
+);
+
+---
+
+Data Storage
+
+LiniusNv supports in-memory storage for maintaining contact and event information during runtime.
+
 const {
   default: makeWASocket,
   makeInMemoryStore
 } = require('@LiniusNv-Bail/Bails');
+
 const pino = require('pino');
 
 const store = makeInMemoryStore({
-  logger: pino().child({ level: 'silent', stream: 'store' })
+  logger: pino().child({
+    level: 'silent',
+    stream: 'store'
+  })
 });
+
 const client = makeWASocket({
-  // options
+  // Your socket configuration
 });
+
 store.bind(client.ev);
 
 client.ev.on('contacts.upsert', () => {
-  console.log('New contact: ' + Object.values(store.contacts()));
-});
-```
-
-# Sending Messages
-
-## Send / relay a message with `noSelfSync`
-
-`noSelfSync` is a `relayMessage` option (private/1-on-1 chats only) that controls whether the
-message is also synced to your **other own linked devices** (other phones/WhatsApp Web sessions
-logged into the same account). It does not affect delivery to the recipient.
-
-- **`noSelfSync: true`** — the message is sent to the recipient as normal, but is **not** synced
-  to your other own devices. Useful when you don't want a message to show up on your other
-  linked sessions (e.g. silent/automated sends from a bot account).
-- **`noSelfSync: false`** (default) — normal behavior. The message is sent to the recipient and
-  also synced to your other own devices, so it appears everywhere you're logged in, just like
-  sending from the official WhatsApp app.
-
-```javascript
-// Sent to the recipient, but NOT synced to your other devices
-await client.relayMessage(m.chat, {
-  conversation: "Hello from LiniusNv"
-}, {
-  noSelfSync: true
+  console.log(
+    'New contact:',
+    Object.values(store.contacts)
+  );
 });
 
-// Sent to the recipient AND synced to your other devices (default behavior)
-await client.relayMessage(m.chat, {
-  conversation: "Hello from LiniusNv"
-}, {
-  noSelfSync: false
-});
+---
 
-// Also works through sendMessage
-await client.sendMessage(m.chat, {
-  text: "Hello from LiniusNv"
-}, {
-  noSelfSync: true
-});
-```
+Messaging
 
-## Send an orderMessage
-```javascript
+LiniusNv provides several methods for sending and relaying different WhatsApp message types.
+
+Message Synchronization
+
+"noSelfSync"
+
+The "noSelfSync" option controls whether a relayed message is synchronized with your other linked devices.
+
+This option applies to private one-to-one chats and does not prevent delivery to the recipient.
+
+Configuration| Behavior
+"true"| Sends the message without syncing it to your other linked devices.
+"false"| Sends the message and allows normal synchronization.
+
+Disable synchronization
+
+await client.relayMessage(
+  m.chat,
+  {
+    conversation: 'Hello from LiniusNv'
+  },
+  {
+    noSelfSync: true
+  }
+);
+
+Enable synchronization (default)
+
+await client.relayMessage(
+  m.chat,
+  {
+    conversation: 'Hello from LiniusNv'
+  },
+  {
+    noSelfSync: false
+  }
+);
+
+Using sendMessage
+
+await client.sendMessage(
+  m.chat,
+  {
+    text: 'Hello from LiniusNv'
+  },
+  {
+    noSelfSync: true
+  }
+);
+
+---
+
+Order Message
+
+Send an order-style message containing a product thumbnail, store name, and payment information.
+
 const fs = require('fs');
+
 const thumbnail = fs.readFileSync('./pouthumb.jpg');
 
 await client.sendMessage(m.chat, {
   thumbnail,
-  message: "Order summary",
-  orderTitle: "My Store",
+  message: 'Order summary',
+  orderTitle: 'My Store',
   totalAmount1000: 72502,
-  totalCurrencyCode: "IDR"
-}, { quoted: m });
-```
+  totalCurrencyCode: 'IDR'
+}, {
+  quoted: m
+});
 
-## Send a pollResultSnapshotMessage
-```javascript
+---
+
+Poll Result Snapshot
+
+Send a poll result snapshot with newsletter information.
+
 await client.sendMessage(m.chat, {
   pollResultMessage: {
-    name: "My Poll",
+    name: 'My Poll',
     options: [
-      { optionName: "Option 1" },
-      { optionName: "Option 2" }
+      { optionName: 'Option 1' },
+      { optionName: 'Option 2' }
     ],
     newsletter: {
-      newsletterName: "0X8 - Society",
-      newsletterJid: "120363424944937940@newsletter"
+      newsletterName: '0X8 - Society',
+      newsletterJid: '120363424944937940@newsletter'
     }
   }
 });
-```
 
-## Send a productMessage
-```javascript
+---
+
+Product Message
+
+Send a product-style message containing product information, pricing, and an external URL button.
+
 await client.relayMessage(m.chat, {
   productMessage: {
-    title: "Product.pdf",
-    description: "Product description",
-    thumbnail: { url: "./pouthumb.jpg" },
-    productId: "EXAMPLE_TOKEN",
-    retailerId: "EXAMPLE_RETAILER_ID",
-    url: "https://example.com",
-    body: "Body text",
-    footer: "Footer",
+    title: 'Product.pdf',
+    description: 'Product description',
+    thumbnail: {
+      url: './pouthumb.jpg'
+    },
+    productId: 'EXAMPLE_TOKEN',
+    retailerId: 'EXAMPLE_RETAILER_ID',
+    url: 'https://example.com',
+    body: 'Body text',
+    footer: 'Footer',
     buttons: [
       {
-        name: "cta_url",
-        buttonParamsJson: "{\"display_text\":\"Visit\",\"url\":\"https://example.com\"}"
+        name: 'cta_url',
+        buttonParamsJson: JSON.stringify({
+          display_text: 'Visit',
+          url: 'https://example.com'
+        })
       }
     ],
     priceAmount1000: 72502,
-    currencyCode: "IDR"
+    currencyCode: 'IDR'
   }
 });
-```
 
-## Send an interactiveMessage
-```javascript
+---
+
+Interactive Message
+
+Create interactive messages with media, titles, descriptions, footers, and configurable buttons.
+
 await client.sendMessage(m.chat, {
-  image: { url: "./pouimg.jpg" },
-  text: "body",
-  title: "title", // required when sending media
-  footer: "footer",
+  image: {
+    url: './pouimg.jpg'
+  },
+  text: 'body',
+  title: 'title',
+  footer: 'footer',
   interactiveButtons: [
     {
-      name: "single_select",
+      name: 'single_select',
       buttonParamsJson: JSON.stringify({
-        title: "\0"
+        title: '\0'
       })
     }
   ],
   messageParams: JSON.stringify({
     bottom_sheet: {
-      /** other params **/
+      // Additional configuration
     }
   })
 });
-```
-
-## Send a member label
-```javascript
-await client.sendMessage(m.chat, {
-  groupLabel: {
-    labelText: "Tagged members appear here"
-  }
-});
-```
-
-## Send a message to group members
-```javascript
-await client.sendMessageMembers(m.chat, {
-  extendedTextMessage: {
-    text: "Hello members"
-  }
-}, {});
-```
-
-# Simple sendMessage Helpers
-
-## Send text
-```javascript
-await client.sendText(m.chat, "Hello!", {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send image
-```javascript
-await client.sendImage(m.chat, { url: "./pouimg.jpg" }, "Caption", {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send video
-```javascript
-await client.sendVideo(m.chat, { url: "./video.mp4" }, "Caption", {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send audio
-```javascript
-await client.sendAudio(m.chat, { url: "./pouaudio.mp3" }, {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send location
-```javascript
-await client.sendLocation(m.chat, "Caption", 90.0, 90.0, "https://example.com", "1234567890", {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send poll
-```javascript
-await client.sendPoll(m.chat, "Pick one", ["1", "2", "3"], true, {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send quiz
-```javascript
-await client.sendQuiz(m.chat, "Quiz question", ["1", "2", "3"], "2", {
-  contextInfo: {
-    mentionedJid: [m.chat]
-  }
-}, {
-  key: {
-    remoteJid: "status@broadcast",
-    participant: m.sender,
-    fromMe: true
-  },
-  message: {
-    conversation: "\0"
-  }
-});
-```
-
-## Send status mention
-```javascript
-await client.statusMention(m.chat, {
-  extendedTextMessage: {
-    text: "Mentioned in status"
-  }
-});
-```
 
 ---
 
-# Credits
+Group Label
 
-LiniusNv is a fork of [Baileys](https://github.com/WhiskeySockets/Baileys), originally created by
-[Adhiraj Singh](https://github.com/adiwajshing) and maintained by the WhiskeySockets community.
-All credit for the underlying protocol implementation goes to the original authors and contributors.
-See [LICENSE](LICENSE) for the full license text and copyright notices.
+Send a message containing a custom group member label.
 
-# Contributing
+await client.sendMessage(m.chat, {
+  groupLabel: {
+    labelText: 'Tagged members appear here'
+  }
+});
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on reporting issues and submitting pull requests.
+---
 
-# Disclaimer
+Send to Group Members
 
-This is **not** an official WhatsApp product. Use of this library to send bulk or unsolicited messages
-may violate WhatsApp's Terms of Service and can result in your number being banned. Use responsibly.
+Use "sendMessageMembers()" to send a message through the group members messaging helper.
+
+await client.sendMessageMembers(m.chat, {
+  extendedTextMessage: {
+    text: 'Hello members'
+  }
+}, {});
+
+---
+
+Message Helpers
+
+LiniusNv includes convenient helper methods for common messaging operations.
+
+These methods simplify sending text, images, videos, audio, locations, polls, quizzes, and status mentions.
+
+Send Text
+
+await client.sendText(
+  m.chat,
+  'Hello!',
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Image
+
+await client.sendImage(
+  m.chat,
+  { url: './pouimg.jpg' },
+  'Caption',
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Video
+
+await client.sendVideo(
+  m.chat,
+  { url: './video.mp4' },
+  'Caption',
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Audio
+
+await client.sendAudio(
+  m.chat,
+  { url: './pouaudio.mp3' },
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Location
+
+await client.sendLocation(
+  m.chat,
+  'Caption',
+  90.0,
+  90.0,
+  'https://example.com',
+  '1234567890',
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Poll
+
+await client.sendPoll(
+  m.chat,
+  'Pick one',
+  ['1', '2', '3'],
+  true,
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Quiz
+
+await client.sendQuiz(
+  m.chat,
+  'Quiz question',
+  ['1', '2', '3'],
+  '2',
+  {
+    contextInfo: {
+      mentionedJid: [m.chat]
+    }
+  },
+  {
+    key: {
+      remoteJid: 'status@broadcast',
+      participant: m.sender,
+      fromMe: true
+    },
+    message: {
+      conversation: '\0'
+    }
+  }
+);
+
+Send Status Mention
+
+Send a message through the status mention helper.
+
+await client.statusMention(m.chat, {
+  extendedTextMessage: {
+    text: 'Mentioned in status'
+  }
+});
+
+---
+
+Credits
+
+LiniusNv is built upon the foundation of "Baileys" (https://github.com/WhiskeySockets/Baileys).
+
+Special thanks to:
+
+- Adhiraj Singh — Original creator of Baileys.
+- WhiskeySockets — Maintainers of the Baileys project.
+- Open-source contributors — Developers who help maintain and improve the underlying ecosystem.
+
+All credits for the original protocol implementation belong to their respective authors and contributors.
+
+For licensing information, see "LICENSE" (LICENSE).
+
+---
+
+Contributing
+
+Contributions are welcome.
+
+If you encounter bugs, have feature requests, or want to improve the project, please refer to:
+
+- "CONTRIBUTING.md" (CONTRIBUTING.md)
+- "GitHub Repository" (https://github.com/LiniusNv-Bail/Bails)
+
+Before submitting a contribution, make sure your changes are properly tested and documented.
+
+---
+
+Disclaimer
+
+LiniusNv is an independent, unofficial project and is not affiliated with, endorsed by, or sponsored by WhatsApp or Meta.
+
+This library interacts with WhatsApp Web through an unofficial implementation.
+
+Users are responsible for ensuring that their usage complies with applicable laws and WhatsApp's Terms of Service.
+
+Sending bulk, unsolicited, or abusive messages may result in account restrictions or permanent bans.
+
+Use LiniusNv responsibly.
